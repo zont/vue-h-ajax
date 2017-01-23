@@ -55,7 +55,7 @@ function makeGetUrl(url, data) {
     .join('&');
 }
 
-function request(method, url, data = null, headers = {}, withCredentials) {
+function request(method, url, data, headers, withCredentials) {
   const xhr = new XMLHttpRequest();
   xhr.withCredentials = withCredentials;
 
@@ -68,7 +68,7 @@ function request(method, url, data = null, headers = {}, withCredentials) {
     xhr.addEventListener('abort', reject);
     xhr.addEventListener('error', reject);
     xhr.addEventListener('load', () => {
-      requests[url].splice(requests[url].indexOf(promise), 1);
+      requests[promise.url].splice(requests[promise.url].indexOf(promise), 1);
 
       if (CODE_SUCCESS <= xhr.status && xhr.status < CODE_FAIL) {
         resolve(parseResponseData(xhr.response, xhr.response));
@@ -86,6 +86,7 @@ function request(method, url, data = null, headers = {}, withCredentials) {
 }
 
 function add(url, request) {
+  request.url = url;
   requests[url] = requests[url] || [];
   requests[url].push(request);
   return request;
@@ -101,7 +102,7 @@ const ajax = {
     return add(url, request(
       'GET',
       data ? makeGetUrl(url, data) : url,
-      {},
+      null,
       Object.assign({}, this.headers, headers),
       this.withCredentials
     ));
@@ -138,7 +139,7 @@ const ajax = {
   },
 
   stop(url) {
-    requests[url].forEach(request => request.abort());
+    (requests[url] || []).forEach(request => request.abort());
     requests[url] = [];
   }
 };
