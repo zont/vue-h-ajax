@@ -9,11 +9,11 @@
 
 `vue-h-ajax` is the small ajax module for [Vue.js](http://vuejs.org). It deeply integrates with Vue.js core to make building Single Page Applications with Vue.js a breeze. Features include:
 
-- Lightweight: ???kb of sources
+- Lightweight: 3.5kb of sources
 - No dependencies
 - try to parse data as JSON by default
-- withCredentials by default
-- DELETE request with body
+- **withCredentials** by default
+- **DELETE** request with body
 
 ## Setup
 ```bash
@@ -39,11 +39,7 @@ Vue.http.stop('/backend/users');
 
 
 const app = new Vue({
-  template: `
-    <div class="main">
-      <component :is="$route.component"/>
-    </div>
-  `,
+  template: '<div class="main"></div>',
   el: '#app',
   created() {
     this.$http.post('/backend/user', {name: 'Bill'}, {'Content-Type': 'application/json'})
