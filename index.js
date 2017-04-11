@@ -128,6 +128,16 @@ const ajax = {
     ));
   },
 
+  patch(url, data, headers) {
+    return add(url, request(
+      'PATCH',
+      url,
+      parseRequestData(data),
+      Object.assign({}, this.headers, headers),
+      this.withCredentials
+    ));
+  },
+
   delete(url, data, headers) {
     return add(url, request(
       'DELETE',
