@@ -30,10 +30,8 @@ Vue.use(ajax);
 
 
 Vue.http.get('/backend/users')
-  .then(users => {
-    console.log(users);
-  })
-  .catch(e => console.error(e));
+  .then(response => console.log(response.data))
+  .catch(response => console.error(response.status));
 
 Vue.http.stop('/backend/users');
 
@@ -46,7 +44,7 @@ const app = new Vue({
       .then(response => {
         console.log(response.data.id);
       })
-      .catch(e => console.error(e));
+      .catch(response => console.error(response.status));
   }
 });
 ```
