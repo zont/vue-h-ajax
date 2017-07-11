@@ -1,13 +1,13 @@
 {
   "name": "vue-h-ajax",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Lightweight ajax module for Vue.js 2",
   "main": "index.js",
   "keywords": [
     "vue",
     "http",
     "ajax",
-	"xhr"
+    "xhr"
   ],
   "scripts": {
     "lint": "eslint index.js",

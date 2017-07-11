@@ -71,9 +71,15 @@ function request(method, url, data, headers, withCredentials) {
       requests[promise.url].splice(requests[promise.url].indexOf(promise), 1);
 
       if (CODE_SUCCESS <= xhr.status && xhr.status < CODE_FAIL) {
-        resolve(parseResponseData(xhr.response, xhr.response));
+        resolve({
+          status: xhr.status,
+          data: parseResponseData(xhr.response, xhr.response)
+        });
       } else {
-        reject(parseResponseData(xhr.response, xhr));
+        reject({
+          status: xhr.status,
+          data: parseResponseData(xhr.response, null)
+        });
       }
     });
   });

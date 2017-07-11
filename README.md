@@ -43,8 +43,8 @@ const app = new Vue({
   el: '#app',
   created() {
     this.$http.post('/backend/user', {name: 'Bill'}, {'Content-Type': 'application/json'})
-      .then(addedUser => {
-        console.log(addedUser.id);
+      .then(response => {
+        console.log(response.data.id);
       })
       .catch(e => console.error(e));
   }
@@ -82,7 +82,13 @@ Vue.http.headers = {
 ```
 
 #### get(url, data, headers), post(...), put(...), delete(...)
-  - returns `Promise`
+  - returns `Promise<response>`. Response format:
+  ```json
+  {
+    "status": Number,
+    "data": Any
+  }
+  ```
 
 #### stop(url)
 Abort all current requests matched **url**
