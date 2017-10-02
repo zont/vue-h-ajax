@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.min';
-import ajax from '../index';
+import ajax from 'vue-h-ajax';
 
 
 window.XMLHttpRequest = class {
