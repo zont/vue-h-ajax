@@ -1,6 +1,6 @@
 {
   "name": "vue-h-ajax",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Lightweight ajax module for Vue.js 2",
   "main": "dist/index.js",
   "module": "dist/index.js",
