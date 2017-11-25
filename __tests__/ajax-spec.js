@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.min';
 import ajax from 'vue-h-ajax';
 
-
 window.XMLHttpRequest = class {
   constructor() {
     this.listeners = {};
@@ -15,7 +14,7 @@ window.XMLHttpRequest = class {
       this._rise('load');
     }, 0);
   }
-  open() {}
+  open() { }
   abort() {
     this._rise('abort');
   }
@@ -26,7 +25,7 @@ window.XMLHttpRequest = class {
 
     this.listeners[type].add(listener);
   }
-  setRequestHeader() {}
+  setRequestHeader() { }
 
   _rise(type) {
     if (this.listeners[type]) {
@@ -37,7 +36,7 @@ window.XMLHttpRequest = class {
   }
 };
 
-class XMLHttpRequest404{
+class XMLHttpRequest404 {
   constructor() {
     this.listeners = {};
     this.status = 0;
@@ -50,7 +49,7 @@ class XMLHttpRequest404{
       this._rise('load');
     }, 0);
   }
-  open() {}
+  open() { }
   abort() {
     this._rise('abort');
   }
@@ -61,7 +60,7 @@ class XMLHttpRequest404{
 
     this.listeners[type].add(listener);
   }
-  setRequestHeader() {}
+  setRequestHeader() { }
 
   _rise(type) {
     if (this.listeners[type]) {
@@ -72,13 +71,9 @@ class XMLHttpRequest404{
   }
 }
 
-
-const httpHelper = (method, data, headers, done) => {
-  Vue.http[method]('/some_url', data, headers)
-    .then(done)
-    .catch(done.fail);
+const httpHelper = async (method, data, headers) => {
+  await Vue.http[method]('/some_url', data, headers);
 };
-
 
 describe('router', () => {
   it('defined', () => {
@@ -114,68 +109,75 @@ describe('router', () => {
   });
 
   describe('get', () => {
-    it('without data', done => httpHelper('get', null, null, done));
+    it('without data', () => httpHelper('get', null, null));
 
-    it('with data', done => httpHelper('get', {param1: 'ddd'}, null, done));
+    it('with data', () => httpHelper('get', { param1: 'ddd' }, null));
 
-    it('with data and headers', done => {
-      Vue.http.get('/some_url?param2=aaa', {param1: 'ddd'}, {header1: 'value1'})
-        .then(done)
-        .catch(done.fail);
+    it('with data and headers', async () => {
+      await Vue.http.get('/some_url?param2=aaa', { param1: 'ddd' }, { header1: 'value1' });
     });
 
-    it('without data and with headers', done => httpHelper('get', null, {header1: 'value1'}, done));
+    it('without data and with headers', () => httpHelper('get', null, { header1: 'value1' }));
   });
 
   describe('post', () => {
-    it('without data', done => httpHelper('post', null, null, done));
+    it('without data', () => httpHelper('post', null, null));
 
-    it('with data', done => httpHelper('post', new FormData(), null, done));
+    it('with data', () => httpHelper('post', new FormData(), null));
 
-    it('with data and headers', done => httpHelper('post', {param1: 'ddd'}, {header1: 'value1'}, done));
+    it('with data and headers', () => httpHelper('post', { param1: 'ddd' }, { header1: 'value1' }));
 
-    it('without data and with headers', done => httpHelper('post', null, {header1: 'value1'}, done));
+    it('without data and with headers', () => httpHelper('post', null, { header1: 'value1' }));
   });
 
   describe('put', () => {
-    it('without data', done => httpHelper('put', null, null, done));
+    it('without data', () => httpHelper('put', null, null));
 
-    it('with data', done => httpHelper('put', {param1: 'ddd'}, null, done));
+    it('with data', () => httpHelper('put', { param1: 'ddd' }, null));
 
-    it('with data and headers', done => httpHelper('put', {param1: 'ddd'}, {header1: 'value1'}, done));
+    it('with data and headers', () => httpHelper('put', { param1: 'ddd' }, { header1: 'value1' }));
 
-    it('without data and with headers', done => httpHelper('put', null, {header1: 'value1'}, done));
+    it('without data and with headers', () => httpHelper('put', null, { header1: 'value1' }));
   });
 
   describe('delete', () => {
-    it('without data', done => httpHelper('delete', null, null, done));
+    it('without data', () => httpHelper('delete', null, null));
 
-    it('with data', done => httpHelper('delete', {param1: 'ddd'}, null, done));
+    it('with data', () => httpHelper('delete', { param1: 'ddd' }, null));
 
-    it('with data and headers', done => httpHelper('delete', {param1: 'ddd'}, {header1: 'value1'}, done));
+    it('with data and headers', () => httpHelper('delete', { param1: 'ddd' }, { header1: 'value1' }));
 
-    it('without data and with headers', done => httpHelper('delete', null, {header1: 'value1'}, done));
+    it('without data and with headers', () => httpHelper('delete', null, { header1: 'value1' }));
   });
 
-  it('stop', done => {
+  it('stop', async () => {
+    expect.assertions(1);
+
     const url = '/some_url';
 
-    Vue.http.get(url)
-      .then(done.fail)
-      .catch(done);
+    try {
+      const req = Vue.http.get(url);
 
-    Vue.http.stop('/undefined_url');
+      Vue.http.stop(url);
 
-    expect(true).toBeTruthy();
+      await req;
 
-    Vue.http.stop(url);
+      expect(false).toBeTruthy();
+    } catch (e) {
+      expect(true).toBeTruthy();
+    }
   });
 
-  it('reject', done => {
+  it('reject', async () => {
+    expect.assertions(1);
+
     window.XMLHttpRequest = XMLHttpRequest404;
 
-    Vue.http.get('/some_url')
-      .then(done.fail)
-      .catch(done);
+    try {
+      await Vue.http.get('/some_url');
+      expect(false).toBeTruthy();
+    } catch (e) {
+      expect(true).toBeTruthy();
+    }
   });
 });

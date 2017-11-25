@@ -2,7 +2,6 @@ const CODE_SUCCESS = 200;
 const CODE_FAIL = 300;
 const requests = {};
 
-
 function instanceOf(src, name) {
   try {
     return src instanceof window[name];
@@ -14,7 +13,7 @@ function instanceOf(src, name) {
 function parseRequestData(params) {
   if (
     // ArrayBufferView
-  instanceOf(params, 'Int8Array') ||
+    instanceOf(params, 'Int8Array') ||
   instanceOf(params, 'Uint8Array') ||
   instanceOf(params, 'Uint8ClampedArray') ||
   instanceOf(params, 'Int16Array') ||
@@ -98,7 +97,6 @@ function add(url, request) {
   return request;
 }
 
-
 const ajax = {
   headers: {},
 
@@ -159,7 +157,6 @@ const ajax = {
     requests[url] = [];
   }
 };
-
 
 module.exports = {
   install(Vue) {
